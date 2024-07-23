@@ -33,5 +33,37 @@ We start with an elementary example. Consider $n = 15$, and suppose we wish to f
 \end{align*}
 Hence $C(15) = 3$. However, this method quickly breaks down for large $n$, where the number of relevant elements of \NTen{} increases with the length of the number. For example, there are $15$ relevant elements of $\NTen$ for $n = 1337$, which are $1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111$. As such, we need a better way to count $C(n)$.
 
-  
+Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of \NTen. Suppose Dave wants to count the number of ways to make  $\$ 15$ in this currency system. This is equivalent to asking what $C(15)$ is.
+
+Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coints of either $\$ p$ or $\$ q$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
+
+Now consider a \emph{generating function} that is defined as the polynomial $f(x) = \sum_{i=1}^{\infty} a_i x^i$. Let the coefficients $a_i$ describe the number of ways to construct $\$ i$ using coins of value $\$ p$. Now let another generating function be defined as $g(x) = \sum_{i=1}^{\infty} b_i x^i$, where the coefficients $b_i$ represent the number of ways to construct $\$ i$ using coins of value $\$ q$. If we multiply these functions together, we get another polynomial \[
+  h(x) = f(x)g(x) = (a_0 + a_1x + a_2x^2 + \dots)(b_0 + b_1x + b_2x^2 + \dots) = \sum_{i=1}^{\infty} c_ix^{i}
+.\] Now, as before, each coefficient $c_i$ represents the number of ways to make $i$ using coins of value $\$ p$ or $\$ q$. Now, let us consider the generating functions of the different coin values of Numberland.
+
+Consider the generating function $g_1$ of coins of value $\$ 1$. Clearly, we can make values of integer value $\$ k$ in exactly $1$ way, that is, $k = 1 + \dots + 1$. Thus the generating function is simply \[
+  g_{1}(x) = 1 + x + x^2 + \dots
+.\] This is clearly a geometric series, and therefore we may simplify $g_1$ to \[
+  g_1(x) = \frac{1}{1-x}
+.\] Next, consider the generating function $g_{10}$ of coins of value $\$ 10$. Note that we can only make amounts that have values of multiples of  $10$. Moreover, we can only make those amounts in exactly $1$ way, which is $10k = 10 + \dots + 10$ for positive integers $k$. Thus we have \[
+g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots + 0x^{19} + \bm{x^{20}} + \dots = 1 + x^{10} + x^{20} + \dots
+.\] Again, we can rewrite this as geometric series in the form \[
+  g_{10}(x) = \frac{1}{1-x^{10}}
+.\] One may now notice a pattern that we now prove more formally.
+\begin{theorem}
+  The generating function for coins of value $a$ is \[
+    g_a(x) = \frac{1}{1-x^a}
+  .\] 
+\end{theorem}
+\begin{proof}
+  i really can't be fucked rn
+\end{proof}
+\begin{theorem}
+  For positive integers $n$, $C(n)$ is equal to the coefficient of $x^{n}$ in \[
+    \prod_{a_i \in \NTen} \frac{1}{(1-x^{a_i})}
+  .\] 
+\end{theorem}
+\begin{proof}
+  yeah well we kinda proved it above didn't we
+\end{proof}
 \end{document}
