@@ -35,8 +35,7 @@ Hence $C(15) = 3$. However, this method quickly breaks down for large $n$, where
 
 Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of \NTen. Suppose Dave wants to count the number of ways to make  $\$ 15$ in this currency system. This is equivalent to asking what $C(15)$ is.
 
-Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coints of either $\$ p$ or $\$ q$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
-
+Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coins of either $\$ 1$ or $\$ 10$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
 Now consider a \emph{generating function} that is defined as the polynomial $f(x) = \sum_{i=1}^{\infty} a_i x^i$. Let the coefficients $a_i$ describe the number of ways to construct $\$ i$ using coins of value $\$ p$. Now let another generating function be defined as $g(x) = \sum_{i=1}^{\infty} b_i x^i$, where the coefficients $b_i$ represent the number of ways to construct $\$ i$ using coins of value $\$ q$. If we multiply these functions together, we get another polynomial \[
   h(x) = f(x)g(x) = (a_0 + a_1x + a_2x^2 + \dots)(b_0 + b_1x + b_2x^2 + \dots) = \sum_{i=1}^{\infty} c_ix^{i}
 .\] Now, as before, each coefficient $c_i$ represents the number of ways to make $i$ using coins of value $\$ p$ or $\$ q$. Now, let us consider the generating functions of the different coin values of Numberland.
@@ -66,4 +65,27 @@ g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots 
 \begin{proof}
   yeah well we kinda proved it above didn't we
 \end{proof}
+
+\section{Problem 2}
+\begin{definition}
+  Let $\mathcal{L}_{10, 2}(N)$ be the minimum number of summands needed to construct $N$ using elements in \NTen. For example, $\mathcal{L}_{10, 2}(13) = 3$.
+\end{definition}
+\begin{problem}
+Determine $\mathcal{L}_{10, 2}(N)$ for the following values of $N$:
+\begin{itemize}
+  \item $1337$
+  \item  $12345$
+  \item  $190274876$
+\end{itemize}
+\end{problem}
+\begin{definition}
+Let $d_N$ be the set of digits in the base $10$ expansion of $N$.
+\end{definition}
+For example, $d_{1337} = \{1, 3, 7\}$.
+\begin{theorem}
+  For a positive integer $N$, $\mathcal{L}_{10, 2}(N) = \max\{d_N\}$.
+\end{theorem}
+\begin{theorem}
+  For a positive integer $N$, we have \[\mathcal{L}_{10, k}(N) = \ceil*{\frac{\max\{d_N\}}{k-1}}.\]
+\end{theorem}
 \end{document}
