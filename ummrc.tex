@@ -1,0 +1,31 @@
+\documentclass{article}
+\input{preamble.tex}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\clearpage
+
+\newcommand\NTen{\ensuremath{\mathcal{N}_{10, 2}}}
+
+Let \NTen{} be the set of positive integers whose digits in base-$10$ comprise only 0s and 1s. Examples of elements in \NTen{} are: $1001$, $110$, and $11$. Examples of elements not in \NTen{} are: $4201$, $690$, and $12$.
+
+Consider a positive integer $N$. It can be constructed as the sum of elements in \NTen{}. For example, one construction of $1337$ with $8$ summands which are elements in \NTen{} is as follows
+\[
+  1337 = 1000 + 111 + 111 + 111 + 1 + 1 + 1 + 1
+.\] 
+
+\section{Problem 1}
+\begin{problem}
+  What are all of the constructions of $1337$ using elements of \NTen{}?
+\end{problem}
+We interpret the question as asking for how many unique ways there are to obtain $1337$ as a sum of elements from \NTen{}. To do this, we look at the general case which seeks to find the number of unique ways to obtain a positive integer  $n$ as a sum of elements from \NTen{}.
+\begin{definition}
+  For sake of convenience, we define a function $C(n)$ that counts the number of unique ways of constructing $n$ as a sum of elements in \NTen{}. That is, $C(n)$ is the number of unique constructions such that \[
+    n = \sum_{a_i \in \NTen} a_i
+  .\] 
+\end{definition}
+We start with an elementary example. Consider $n = 15$, and suppose we wish to find $C(15)$. 
+
+  
+\end{document}
