@@ -25,7 +25,13 @@ We interpret the question as asking for how many unique ways there are to obtain
     n = \sum_{a_i \in \NTen} a_i
   .\] 
 \end{definition}
-We start with an elementary example. Consider $n = 15$, and suppose we wish to find $C(15)$. 
+We start with an elementary example. Consider $n = 15$, and suppose we wish to find $C(15)$. Clearly, the only elements of \NTen{} that are relevant here are $1$, $10$ and $11$. With so few elements, we can easily calculate $C(15)$ manually. We find that there are three unique constructions of $15$, which are 
+\begin{align*}
+  15 &= 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 \\
+  15 &= 1 + 1 + 1 + 1 + 1 + 10 \\
+  15 &= 1 + 1 + 1 + 1 + 11.
+\end{align*}
+Hence $C(15) = 3$. However, this method quickly breaks down for large $n$, where the number of relevant elements of \NTen{} increases with the length of the number. For example, there are $15$ relevant elements of $\NTen$ for $n = 1337$, which are $1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, 1100, 1101, 1110, 1111$. As such, we need a better way to count $C(n)$.
 
   
 \end{document}
