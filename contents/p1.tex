@@ -1,0 +1,96 @@
+
+Let \NTen{} be the set of positive integers whose digits in base-$10$ comprise only 0s and 1s. Examples of elements in \NTen{} are: $1001$, $110$, and $11$. Examples of elements not in \NTen{} are: $4201$, $690$, and $12$.
+
+Consider a positive integer $N$. It can be constructed as the sum of elements in \NTen{}. For example, one construction of $1337$ with $8$ summands which are elements in \NTen{} is as follows
+\[
+  1337 = 1000 + 111 + 111 + 111 + 1 + 1 + 1 + 1
+.\] 
+
+\section{Problem 1}
+\begin{problem}
+  What are all of the constructions of $1337$ using elements of \NTen{}?
+\end{problem}
+We interpret the question as asking for how many unique ways there are to obtain $1337$ as a sum of elements from \NTen{}. To do this, we look at the general case which seeks to find the number of unique ways to obtain a positive integer  $n$ as a sum of elements from \NTen{}.
+\begin{definition}
+  For sake of convenience, we define a function $C(n)$ that counts the number of unique ways of constructing $n$ as a sum of elements in \NTen{}. That is, $C(n)$ is the number of unique constructions such that \[
+    n = \sum_{a_i \in \NTen} a_i
+  .\] 
+\end{definition}
+We start with an elementary example. Consider $n = 15$, and suppose we wish to find $C(15)$. Clearly, the only elements of \NTen{} that are relevant here are $1$, $10$ and $11$. With so few elements, we can easily calculate $C(15)$ manually. We find that there are three unique constructions of $15$, which are 
+\begin{align*}
+  15 &= 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 \\
+  15 &= 1 + 1 + 1 + 1 + 1 + 10 \\
+  15 &= 1 + 1 + 1 + 1 + 11.
+\end{align*}
+Hence $C(15) = 3$. However, this method quickly becomes impractical for large $n$, where the number of relevant elements of \NTen{} increases with the length of the number. For example, there are $15$ relevant elements of $\NTen$ for $n = 1337$, which are $1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, 1100, 1101, 1110$ and $1111$. As such, we need a better way to count $C(n)$.
+
+Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of \NTen. Suppose Dave wants to count the number of ways to make  $\$ 15$ in this currency system. This is equivalent to asking what $C(15)$ is.
+
+Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coins of either $\$ 1$ or $\$ 10$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
+
+Now consider a \emph{generating function} that is defined as the polynomial $f(x) = \sum_{i=1}^{\infty} a_i x^i$. Let the coefficients $a_i$ describe the number of ways to construct $\$ i$ using coins of value $\$ p$. Now let another generating function be defined as $g(x) = \sum_{i=1}^{\infty} b_i x^i$, where the coefficients $b_i$ represent the number of ways to construct $\$ i$ using coins of value $\$ q$. If we multiply these functions together, we get another polynomial \[
+  h(x) = f(x)g(x) = (a_0 + a_1x + a_2x^2 + \dots)(b_0 + b_1x + b_2x^2 + \dots) = \sum_{i=1}^{\infty} c_ix^{i}
+.\] Now, as before, each coefficient $c_i$ represents the number of ways to make $i$ using coins of value $\$ p$ or $\$ q$. Now, let us consider the generating functions of the different coin values of Numberland.
+
+Consider the generating function $g_1$ of coins of value $\$ 1$. Clearly, we can make values of integer value $\$ k$ in exactly $1$ way, that is, $k = 1 + \dots + 1$. Thus the generating function is simply \[
+  g_{1}(x) = 1 + x + x^2 + \dots
+.\] This is clearly a geometric series, and therefore we may simplify $g_1$ to \[
+  g_1(x) = \frac{1}{1-x}
+.\] Next, consider the generating function $g_{10}$ of coins of value $\$ 10$. Note that we can only make amounts that have values of multiples of  $10$. Moreover, we can only make those amounts in exactly $1$ way, which is $10k = 10 + \dots + 10$ for positive integers $k$. Thus we have \[
+g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots + 0x^{19} + \bm{x^{20}} + \dots = 1 + x^{10} + x^{20} + \dots
+.\] Again, we can rewrite this as geometric series in the form \[
+  g_{10}(x) = \frac{1}{1-x^{10}}
+.\] One may now notice a pattern that we now prove more formally.
+\begin{theorem}
+  The generating function for coins of value $a$ is \[
+    g_a(x) = \frac{1}{1-x^a}
+  .\] 
+\end{theorem}
+\begin{proof}
+  Given coins of value $a$, we can only make amounts of value $ka$, where $k$ is an integer. Moreover, we can make these amounts in exactly one way, with $k$ coins. Thus the generating function, which can be rewritten as a geometric series, must be \[
+    g_a(x) = x^{0a} + x^{a} + x^{2a} + \dots = \frac{1}{1-x^{a}} \qedhere
+  .\] 
+\end{proof}
+\begin{theorem}
+  For positive integers $n$, $C(n)$ is equal to the coefficient of $x^{n}$ in \[
+    \prod_{a_i \in \NTen} \frac{1}{1-x^{a_i}}
+  .\] 
+\end{theorem}
+\begin{proof}
+  Recall that we can multiply generating functions together, and the resulting coefficients of each term $x^{n}$ represents the number of ways to form $n$. Thus we multiply the generating functions for all the numbers in the set \NTen{} to get the function \[
+    \prod_{a_i\in \NTen} \frac{1}{1-x^{a_i}}
+  ,\] where the coefficient of $x^n$ denotes the number of ways to form $n$, which is equivalent to $C(n)$.
+\end{proof}
+Unfortunately, there exists no closed form expression to determine $C(n)$. %insert graph here please ed
+However, by using computer software like Mathematica, we may calculate $C(n)$, to get $C(1337) = 1448684$. We may graph the function $C(n)$, and although it looks exponential, the function is subexponential if we use a logarithmic scale \cite{spivak}. This is commonly known as a restricted partition function, which aympototically approaches \cite{hardyramanujan} \[
+  C(n) \sim \frac{a}{n}e^{b\sqrt{n}}
+.\] % add a reference
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={$n$}, ylabel={$C(n)$}, title = {$C(n)$ vs $n$}]
+      \addplot[thick, red] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something2.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={$n$}, ylabel={$C(n)$}, title = {$C(n)$ vs $n$}]
+      \addplot[thick, red] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{The number of ways $C(n)$ to make $n$ increases rapidly as $n$ increrases}
+  \label{f1}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something2.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={$n$}, ylabel={$C(n)$}, title = {$C(n)$ vs $n$, log scale}, ymode = log]
+      \addplot[thick, red] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{The number of ways, $C(n)$, grows sub-exponentially}
+  \label{f2:log}
+\end{figure}
