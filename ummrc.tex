@@ -7,6 +7,7 @@
 \clearpage
 
 \newcommand\NTen{\ensuremath{\mathcal{N}_{10, 2}}}
+\newcommand\LTen{\ensuremath{\mathcal{L}_{10, 2}}}
 
 Let \NTen{} be the set of positive integers whose digits in base-$10$ comprise only 0s and 1s. Examples of elements in \NTen{} are: $1001$, $110$, and $11$. Examples of elements not in \NTen{} are: $4201$, $690$, and $12$.
 
@@ -55,7 +56,9 @@ g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots 
   .\] 
 \end{theorem}
 \begin{proof}
-  i really can't be fucked rn
+  Given coins of value $a$, we can only make amounts of value $ka$, where $k$ is an integer. Moreover, we can make these amounts in exactly one way, with $k$ coins. Thus the generating function, which can be rewritten as a geometric series, must be \[
+    g_a(x) = x^{0a} + x^{a} + x^{2a} + \dots = \frac{1}{1-x^{a}} \qedhere
+  .\] 
 \end{proof}
 \begin{theorem}
   For positive integers $n$, $C(n)$ is equal to the coefficient of $x^{n}$ in \[
@@ -63,14 +66,20 @@ g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots 
   .\] 
 \end{theorem}
 \begin{proof}
-  yeah well we kinda proved it above didn't we
+  Recall that we can multiply generating functions together, and the resulting coefficients of each term $x^{n}$ represents the number of ways to form $n$. Thus we multiply the generating functions for all the numbers in the set \NTen to get the function \[
+    \prod_{a_i\in \NTen} \frac{1}{(1-x^{a_i})}
+  ,\] where the coefficient of $x^n$ denotes the number of ways to form $n$, which is equivalent to $C(n)$.
 \end{proof}
+Unfortunately, there exists no closed form expression to determine $C(n)$. %insert graph here please ed
+However, by using computer software like Mathematica, we may calculate $C(n)$, to get $C(1337) = 1448684$. We may graph the function $C(n)$, and although it looks exponential, the function is subexponential if we use a logarithmic scale. This is commonly known as a restricted partition function, which aympototically approaches \[
+  C(n) \sim \frac{a}{n}e^{b\sqrt{n}}
+.\] % add a reference
 
 \section{Problem 2}
 \begin{definition}
-  Let $\mathcal{L}_{10, 2}(N)$ be the minimum number of summands needed to construct $N$ using elements in \NTen. For example, $\mathcal{L}_{10, 2}(13) = 3$.
+  Let $\mathcal{L}_{10, 2}(N)$ be the minimum number of summands needed to construct $N$ using elements in \NTen.
 \end{definition}
-\begin{problem}
+\begin{problem}\label{p2}
 Determine $\mathcal{L}_{10, 2}(N)$ for the following values of $N$:
 \begin{itemize}
   \item $1337$
@@ -78,14 +87,93 @@ Determine $\mathcal{L}_{10, 2}(N)$ for the following values of $N$:
   \item  $190274876$
 \end{itemize}
 \end{problem}
+For sake of convenience, we define a $d_{n, i}$ to be the $i$th digit of $n$.
 \begin{definition}
-Let $d_N$ be the set of digits in the base $10$ expansion of $N$.
+  For an integer $n$, the $i$th digit of  $n$, with the leftmost digit being the first, is denoted $d_{n, i}$.
 \end{definition}
-For example, $d_{1337} = \{1, 3, 7\}$.
+For example, $d_{1337, 4} = 7$.
 \begin{theorem}
-  For a positive integer $N$, $\mathcal{L}_{10, 2}(N) = \max\{d_N\}$.
+  For a positive integer $N$, $\mathcal{L}_{10, 2}(N) = \max\{d_{n, i}\}$.
 \end{theorem}
+\begin{proof}
+  Firstly, we recognise that $\LTen(n)$ is equivalent to the minimum number of subtractions to make $0$ from $n$, using elements of \NTen. Intuitively, it is obvious that an optimal strategy would be to subtract $1$ from every non-zero digit in $n$, which decreases the largest digit by $1$ every time. This means that the total number of subtractions is simply equal to the largest digit of $n$. We can prove that this is the optimal strategy as part of a more general theorem.
+\end{proof}
 \begin{theorem}
-  For a positive integer $N$, we have \[\mathcal{L}_{10, k}(N) = \ceil*{\frac{\max\{d_N\}}{k-1}}.\]
+  For a positive integer $N$, we have \[\mathcal{L}_{10, k}(N) = \ceil*{\frac{\max\{d_{n, i}\}}{k-1}}.\]
 \end{theorem}
+\begin{proof}
+  Recall that in \NTen{}, the largest available digit is $k-1$. Again, the optimal strategy is to subtract $k-1$ from the largest digit in $n$ at every subtraction, until the largest digit is less than $k-1$, at which point it is obvious that it takes one more subtraction to reach zero. This gives us a total number of \[
+    \ceil*{\frac{\max\{d_{n, i\}}}{j-1}}
+  \] subtractions. We must now prove that it is impossible to do better than this. 
+
+  Firstly, notice that if we subtract using numbers that are less than the largest digit every time, then the largest digit decreases by less than $k-1 $ each subtraction, meaning that we cannot beat the previous minimum number of subtractions. However, if we use subtractions that use digits larger than the largest digit in $n$, such as in $123-4$, we must be more careful.
+
+  Consider the representation of a 4 digit number $n$ as concatenated digits $a|b|c|d$. Note that we can `group' digits to make an equivalent representation $(10a + b)|c|d$, in other words, we will allow `digits' that have two numbers.
+
+  Now consider the subtraction $123-4$. The usual way we subtract numbers is that we `carry' a $1$ to the $3$ to do the subtraction $1|1|13 - 4 = 119$. Thus we see that the representation $a|b|c|d$ is equivalent to the representation $a|b|(c-1)|(d+10)$. This only occurs when we subtract using a digit that is greater than the largest digit in $n$. Notice that if we do not use any `alternate' representations, with the digits in their usual place, then every digit will be between $0$ and $9$, inclusive. This means that the \emph{maximum} number of subtractions must be \[
+    \ceil*{\frac{9}{k-1}}
+  .\] However, note that if we subtract using digits larger than the largest digit in  $n$, then we must have some pattern of  $(c-1)|(d+10)$ in the representation of  $n$. This means that the largest digit of $n$ now ranges from $10$ to $19$, inclusive. Importantly, this means that the \emph{minimum} number of subtractions is now \[
+  \ceil*{\frac{10}{k-1}} \ge \ceil*{\frac{9}{k-1}}
+  .\] Thus it always takes more (or the same) number of subtractions if we subtract using digits that are larger than the largest digit in $n$. Hence, the optimal strategy of subtracting using digits that are equal to the largest digit, is indeed the best possible strategy.
+\end{proof}
+Using this, we can easily determine the answers to Problem~\ref{p2}, which are in Table~\ref{t1}.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lc} \toprule
+    $n$ & $\LTen(n)$ \\ \midrule
+    1337 & 7 \\
+    12345 & 5 \\
+    190274876 & 9 \\ \bottomrule
+  \end{tabular}
+  \caption{}
+  \label{t1}
+\end{table}
+
+\section{Problem 3}
+In general, let  $\mathcal{N}_{10, k}$ be the set of positive integers whose digits in base-10 are strictly less than $k$, where $k$ is a given positive integer. Let $\mathcal{L}_{10,k}(N)$ be the minimum number of summands needed to construct $N$ using elements in $\mathcal{N}_{10,k}$.
+
+\begin{problem}
+  Given the definitions, 
+  \begin{itemize}
+    \item Explore the relationship between $k$ and $\mathcal{L}_{10, k}(N)$.
+    \item Define $L_{j, k}(N)$ and investigate the nature of $L_{j, k}(N)$ for positive integers $j, k$.
+  \end{itemize}
+\end{problem}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={Number of hives, $m$}, ylabel={Expected time, $E_1$}, title = {Expected time for all hives to be infected vs number of hives}]
+      \addplot[thick, cmap1] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{The expected time decreases as $m$ increases, $p = 0.2$.}
+  \label{fig:decreasing}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something2.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={Number of hives, $m$}, ylabel={Expected time, $E_1$}, title = {Expected time for all hives to be infected vs number of hives}]
+      \addplot[thick, cmap1] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{The expected time decreases as $m$ increases, $p = 0.2$.}
+  \label{fig:decreasing2}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}
+    \pgfplotstableread{graph/something2.dat}{\decreasing}
+    \begin{axis}[height = 6cm, width = 0.9\columnwidth, xlabel={Number of hives, $m$}, ylabel={Expected time, $E_1$}, title = {Expected time for all hives to be infected vs number of hives}, ymode = log]
+      \addplot[thick, cmap1] table {\decreasing};
+    \end{axis}
+  \end{tikzpicture}
+  \caption{The expected time decreases as $m$ increases, $p = 0.2$.}
+  \label{fig:decreasing3}
+\end{figure}
+
+
+
 \end{document}
