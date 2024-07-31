@@ -24,7 +24,7 @@ We start with an elementary example. Consider $n = 15$, and suppose we wish to f
 \end{align*}
 Hence $C(15) = 3$. However, this method quickly becomes impractical for large $n$, where the number of relevant elements of \NTen{} increases with the length of the number. For example, there are $15$ relevant elements of $\NTen$ for $n = 1337$, which are $1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, 1100, 1101, 1110$ and $1111$. As such, we need a better way to count $C(n)$.
 
-Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of only $\$1$ and $\$10$ coins. Suppose Dave wants to count the number of ways to make  $\$ 20$ in this currency system. This is equivalent to asking what $C(20)$ is.
+Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of \NTen. Suppose Dave wants to count the number of ways to make  $\$ 15$ in this currency system. This is equivalent to asking what $C(15)$ is.
 
 % Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coins of either $\$ 1$ or $\$ 10$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
 Take a power series $f(x) = \sum_{i=0}^{\infty} a_ix^{i}$, whose coefficients $a_i$ denote the number of ways to make $\$ i$ using only $\$1$ coins. Clearly, \[
