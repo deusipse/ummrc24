@@ -1,0 +1,20 @@
+\clearpage
+\appendix
+\section{Code for computation of coefficients}
+The following Mathematica code provides the function \verb|c[n]| that returns the value of $c(n)$, for $n<9999$.
+\begin{minted}{mathematica}
+f[x_] := 1/((1 - x^(1)) (1 - x^(10)) (1 - x^(11)) (1 - x^(100)) (1 - x^(101)) (1 - x^(110)) (1 - x^(111)) (1 - x^(1000)) (1 - x^(1001)) (1 - x^(1010)) (1 - x^(1011)) (1 - x^(1100)) (1 - x^(1101)) (1 - x^(1110)) (1 - x^(1111)))
+c[n_] := SeriesCoefficient[f[x], {x, 0, n}]
+\end{minted}
+It does this by calculating the coefficient of $x^{n}$ in the expansion of \[
+  \prod_{a_{i}\in \mathcal{N}}\frac{1}{1-x^{a_i}}
+,\] where $\mathcal{N}$ consists of the first 15 terms in $\mathcal{N}_{10, 2}$, which are $1, 10, 11, 100, 101, 110, 111, \allowbreak 1000, \allowbreak 1001, \allowbreak 1010, \allowbreak 1011, \allowbreak 1100, 1101, 1110, 1111$, due to numerical limitations. This means that $C(n)$ is only accurate up to $9999$.
+
+The following C++ code provides the functions \verb|countTotal(n)| which returns $C(n)$ and \verb|countMin(n)|, which returns  $\LTen(n)$, which are accurate for $n \le 33896$, at which point integer overflow prevents further calculation (although arbitrary integer precision can be used to circumvent this).
+\inputminted{cpp}{code/code.cpp}
+This outputs
+\begin{minted}[linenos=false]{text}
+1448684
+5
+\end{minted}
+which matches the expected values of $C(1337)$ and $\LTen(12345)$.

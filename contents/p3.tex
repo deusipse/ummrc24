@@ -1,10 +1,68 @@
 \section{Problem 3}
-In general, let  $\mathcal{N}_{10, k}$ be the set of positive integers whose digits in base-10 are strictly less than $k$, where $k$ is a given positive integer. Let $\mathcal{L}_{10,k}(N)$ be the minimum number of summands needed to construct $N$ using elements in $\mathcal{N}_{10,k}$.
-
+In general, let  $\mathcal{N}_{10, k}$ be the set of positive integers whose digits in base-10 are strictly less than $k$, where $k$ is a given positive integer. Let $\mathcal{L}_{10,k}(n)$ be the minimum number of summands needed to construct $n$ using elements in $\mathcal{N}_{10,k}$.
 \begin{problem}
   Given the definitions, 
   \begin{itemize}
-    \item Explore the relationship between $k$ and $\mathcal{L}_{10, k}(N)$.
-    \item Define $L_{j, k}(N)$ and investigate the nature of $L_{j, k}(N)$ for positive integers $j, k$.
+    \item Explore the relationship between $k$ and $\mathcal{L}_{10, k}(n)$.
+    \item Define $L_{j, k}(n)$ and investigate the nature of $L_{j, k}(n)$ for positive integers $j, k$.
   \end{itemize}
 \end{problem}
+We expand on the ideas from Theorem~\ref{thm1} and prove a generalised formula for $\mathcal{L}_{10, k}(n).$
+\begin{theorem} \label{thm:max}
+  For a positive integers $n, k$, we have \[\mathcal{L}_{10, k}(n) = \ceil*{\frac{\max\{d_{n, i}\}}{k-1}}.\]
+\end{theorem}
+\begin{proof}
+  Recall that in \NTen{}, the largest available digit is $k-1$. Again, the optimal strategy is to subtract $k-1$ from the largest digit in $n$ at every subtraction, until the largest digit is less than $k-1$, at which point it is obvious that it takes one more subtraction to reach zero. This gives us a total number of \[
+    \ceil*{\frac{\max\{d_{n, i\}}}{k-1}}
+  \] subtractions. We must now prove that it is impossible to do better than this. 
+
+  Firstly, notice that if we subtract using numbers that are less than the largest digit every time, then the largest digit decreases by less than $k-1 $ each subtraction, meaning that we cannot beat the previous minimum number of subtractions. However, if we use subtractions that use digits larger than the largest digit in $n$, such as in $123-4$, we must be more careful.
+
+  Consider the representation of a 4-digit number $n$ as concatenated digits $a|b|c|d$. Note that we can `group' digits to make an equivalent representation $(10a + b)|c|d$, in other words, we will allow `digits' that have two numbers.
+
+  Now consider the subtraction $123-4$. The usual way we subtract numbers is that we `carry' a $1$ to the $3$ to do the subtraction $1|1|13 - 4 = 119$. Thus we see that the representation $a|b|c|d$ is equivalent to the representation $a|b|(c-1)|(d+10)$. This only occurs when we subtract using a digit that is greater than the largest digit in $n$. Notice that if we do not use any `alternate' representations, with the digits in their usual place, then every digit will be between $0$ and $9$, inclusive. This means that the \emph{maximum} number of subtractions must be \[
+    \ceil*{\frac{9}{k-1}}
+  .\] However, note that if we subtract using digits larger than the largest digit in  $n$, then we must have some pattern of  $(c-1)|(d+10)$ in the representation of  $n$. This means that the largest digit of $n$ now ranges from $10$ to $19$, inclusive. Importantly, this means that the \emph{minimum} number of subtractions is now \[
+  \ceil*{\frac{10}{k-1}} \ge \ceil*{\frac{9}{k-1}}
+  .\] Thus it always takes more (or the same) number of subtractions if we subtract using digits that are larger than the largest digit in $n$. Hence, the optimal strategy of subtracting using digits that are equal to the largest digit, is indeed the best possible strategy.
+\end{proof}
+Using this, we can easily determine the answers to Problem~\ref{p2}, which are in Table~\ref{t1}.
+\begin{table}[H]
+  \centering
+  \begin{tabular}{lc} \toprule
+    $n$ & $\LTen(n)$ \\ \midrule
+    1337 & 7 \\
+    12345 & 5 \\
+    190274876 & 9 \\ \bottomrule
+  \end{tabular}
+  \caption{The minimum number of summands is equal to the largest digit.}
+  \label{t1}
+\end{table}
+We now turn our attention to the second part of the problem. 
+\begin{definition}
+  For integers $j, k$, we define $\NN_{j, k}$ to be the set of numbers whose digits in base $j$ are less than $k$.
+\end{definition}
+\begin{definition}
+  For integers $j, k$, we define $\LL_{j, k}(n)$ to be the minimum number of summands to construct $n$ using elements from $\NN_{j, k}$.
+\end{definition}
+This is not so different from the previously defined \NTen, apart from the fact that we now allow bases greater than $10$, such as allowing digits like $\mathrm{F}=15$ as in hexadecimal.
+
+In fact, Theorem~\ref{thm:max} remains unchanged for $\LL_{j, k}$, that is, we have that \[
+  \LL_{j, k}(n) = \ceil*{\frac{\max\{d_{n, i}\}}{k-1}}
+\] for all positive integers $n, j, k$. The proof of this fact will follow identical reasoning to that of the previous theorem.
+ \begin{theorem}
+   For positive integers $n, j, k$, we have \[
+  \LL_{j, k}(n) = \ceil*{\frac{\max\{d_{n, i}\}}{k-1}}.
+\]
+\end{theorem}
+\begin{proof}
+  We adapt our previous argument to work for digits of base $j$. Again, we consider the analogous problem of finding the minimum number of subtractions from $n$ to make $0$. 
+
+  Like previously, the optimal strategy of subtracting $k-1$ from the largest digit until the largest digit is less than $k-1$ works, and the maximum number of subtractions using this method is  \[
+    \ceil*{\frac{j-1}{k-1}}
+  .\] The case where we subtract less than $k-1$ from the largest digit is trivially less optimal, and takes more subtractions, so we move on to the case where we subtract using digits larger than the largest digit.
+
+  Consider a 4-digit number in base $j$, which we will denote $a|b|c|d$, where $a, b, c, d$ are digits in base $j$, and suppose $d$ is the largest digit. Since we are in base $j$, all the digits are less than $j$, where $j$ is an arbitrary integer. Now suppose we want to subtract $e$ where $e > d$. This is equivalent to the subtraction $a | b | c-1 | d+j - e$. Critically, notice that $d+j-e > d$, since  $j>e$. Thus the largest digit has now increased, meaning that we must make more subtractions. That is, a lower bound for the number of subtractions is now \[
+    \ceil*{\frac{j}{k-1}}.
+  \] Again, this shows that the optimal strategy indeed provides the minimal answer.
+\end{proof}

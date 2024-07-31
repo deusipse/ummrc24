@@ -7,7 +7,7 @@ Consider a positive integer $N$. It can be constructed as the sum of elements in
 .\] 
 
 \section{Problem 1}
-\begin{problem}
+\begin{problem}\label{p1}
   What are all of the constructions of $1337$ using elements of \NTen{}?
 \end{problem}
 We interpret the question as asking for how many unique ways there are to obtain $1337$ as a sum of elements from \NTen{}. To do this, we look at the general case which seeks to find the number of unique ways to obtain a positive integer  $n$ as a sum of elements from \NTen{}.
@@ -26,21 +26,18 @@ Hence $C(15) = 3$. However, this method quickly becomes impractical for large $n
 
 Let us consider a simpler case. Consider a fictional country Numberland whose currency system consists of \NTen. Suppose Dave wants to count the number of ways to make  $\$ 15$ in this currency system. This is equivalent to asking what $C(15)$ is.
 
-Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coins of either $\$ 1$ or $\$ 10$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
+% Suppose the number of ways to make $\$ p$ using only $\$ 1$ coins is $m$, and the number of ways to make $\$ q$ using only $\$ 10$ coins is $n$. Now, consider the terms $mx^{p}$ and $nx^{q}$. Due to the multiplication principle, the number of ways to make $\$ p+q$ using coins of either $\$ 1$ or $\$ 10$ is obviously $mn$. This is equivalent to looking at the coefficient of $p+q$ after multiplying $mx^{p}$ and $nx^{q}$.
+Take a power series $f(x) = \sum_{i=0}^{\infty} a_ix^{i}$, whose coefficients $a_i$ denote the number of ways to make $\$ i$ using only $\$1$ coins. Clearly, \[
+  f(x) = 1 + x + x^{2} + x^{3} + \dots
+,\] because there is one way to make every integer using only $1$s. In addition, take the power series $g(x) = \sum_{i=0}^{\infty} b_ix^{i}$ whose coefficients $b_i$ represent the number of ways to make $\$ i$ using only $\$ 10$ coins. Since one can only make multiples of $\$10$ using $\$10$ coins, we have \[
+g(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots + 0x^{19} + \bm{x^{20}} + \dots = 1 + x^{10} + x^{20} + \dots
+,\] since there is exactly one way to make every multiple of $10$. Now let us take the product $f(x)g(x)$ and find the coefficient of $x^{20}$. We have \[
+  f(x)g(x) = (1+x+x^{2}+x^{3} + \dots) (1+x^{10} + x^{20} + x^{30} + \dots)
+,\] and note that we can make $x^{20}$ from $1\times x^{20}$, $x^{10}\times x^{10}$ and $x^{20}\times 1$, meaning that the coefficient of $x^{20}$ is $3$. The key observation here is that each of the ways to make $x^{20}$ corresponds to a way to make $\$20$ using $\$1$ or $\$10$ coins, and we can indeed verify that there are three ways to make $\$20$ using $\$1$ or $\$10$ coins, which are $20 = 1 + 1 + \dots + 1 = 10 + 1 + \dots + 1 = 10 + 10$.
 
-Now consider a \emph{generating function} that is defined as the polynomial $f(x) = \sum_{i=1}^{\infty} a_i x^i$. Let the coefficients $a_i$ describe the number of ways to construct $\$ i$ using coins of value $\$ p$. Now let another generating function be defined as $g(x) = \sum_{i=1}^{\infty} b_i x^i$, where the coefficients $b_i$ represent the number of ways to construct $\$ i$ using coins of value $\$ q$. If we multiply these functions together, we get another polynomial \[
-  h(x) = f(x)g(x) = (a_0 + a_1x + a_2x^2 + \dots)(b_0 + b_1x + b_2x^2 + \dots) = \sum_{i=1}^{\infty} c_ix^{i}
-.\] Now, as before, each coefficient $c_i$ represents the number of ways to make $i$ using coins of value $\$ p$ or $\$ q$. Now, let us consider the generating functions of the different coin values of Numberland.
-
-Consider the generating function $g_1$ of coins of value $\$ 1$. Clearly, we can make values of integer value $\$ k$ in exactly $1$ way, that is, $k = 1 + \dots + 1$. Thus the generating function is simply \[
-  g_{1}(x) = 1 + x + x^2 + \dots
-.\] This is clearly a geometric series, and therefore we may simplify $g_1$ to \[
-  g_1(x) = \frac{1}{1-x}
-.\] Next, consider the generating function $g_{10}$ of coins of value $\$ 10$. Note that we can only make amounts that have values of multiples of  $10$. Moreover, we can only make those amounts in exactly $1$ way, which is $10k = 10 + \dots + 10$ for positive integers $k$. Thus we have \[
-g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots + 0x^{19} + \bm{x^{20}} + \dots = 1 + x^{10} + x^{20} + \dots
-.\] Again, we can rewrite this as geometric series in the form \[
-  g_{10}(x) = \frac{1}{1-x^{10}}
-.\] One may now notice a pattern that we now prove more formally.
+Functions like $f$ and $g$ are called \emph{generating functions} that are defined as the series $p(x) = \sum_{i=1}^{\infty} a_i x^i$. In general, let the coefficients $a_i$ describe the number of ways to construct $\$ i$ using coins of value $\$ a$. Now let another generating function be defined as $q(x) = \sum_{i=1}^{\infty} b_i x^i$, where the coefficients $b_i$ represent the number of ways to construct $\$ i$ using coins of value $\$ b$. If we multiply these functions together, we get another generating function $h$ where \[
+  h(x) = p(x)q(x) = (a_0 + a_1x + a_2x^2 + \dots)(b_0 + b_1x + b_2x^2 + \dots) = \sum_{i=1}^{\infty} c_ix^{i}
+.\] Now, each coefficient $c_i$ represents the number of ways to make $i$ using coins of value $\$ a$ or $\$ b$. We now return to the problem of making amounts using coins in Numberland, with our tools of generating functions.
 \begin{theorem}
   The generating function for coins of value $a$ is \[
     g_a(x) = \frac{1}{1-x^a}
@@ -48,8 +45,8 @@ g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots 
 \end{theorem}
 \begin{proof}
   Given coins of value $a$, we can only make amounts of value $ka$, where $k$ is an integer. Moreover, we can make these amounts in exactly one way, with $k$ coins. Thus the generating function, which can be rewritten as a geometric series, must be \[
-    g_a(x) = x^{0a} + x^{a} + x^{2a} + \dots = \frac{1}{1-x^{a}} \qedhere
-  .\] 
+    g_a(x) = x^{0a} + x^{a} + x^{2a} + \dots = \frac{1}{1-x^{a}}. \qedhere
+  \] 
 \end{proof}
 \begin{theorem}
   For positive integers $n$, $C(n)$ is equal to the coefficient of $x^{n}$ in \[
@@ -61,12 +58,12 @@ g_{10}(x) = \bm{1} + 0x + 0x^2 + \dots + 0x^{9} + \bm{x^{10}} + 0x^{11} + \dots 
     \prod_{a_i\in \NTen} \frac{1}{1-x^{a_i}}
   ,\] where the coefficient of $x^n$ denotes the number of ways to form $n$, which is equivalent to $C(n)$.
 \end{proof}
-Unfortunately, there exists no closed form expression to determine $C(n)$. %insert graph here please ed
-However, by using computer software like Mathematica, we may calculate $C(n)$, to get $C(1337) = 1448684$. We may graph the function $C(n)$, and although it looks exponential, the function is subexponential if we use a logarithmic scale \cite{spivak}. This is commonly known as a restricted partition function, which aympototically approaches \cite{hardyramanujan} \[
+Unfortunately, it is unknown whether there exists a closed form expression to determine $C(n)$, which in the literature is referred to as a restricted partition function. Hardy and Ramanujan proved in 1918 \cite{hardyramanujan} that the partition function asymptotically approaches \[
   C(n) \sim \frac{a}{n}e^{b\sqrt{n}}
-.\] % add a reference
+\] for constants $a$ and $b$.
 
-\begin{figure}[htbp]
+We can, however, use computer software like Mathematica to calculate the coefficients in the generating function, and thus we can calculate $C(n)$ to get $C(1337) = 1448684$, which is the answer to Problem~\ref{p1}. We may graph the function $C(n)$, and although it looks exponential (Figure~\ref{f1}), the function is sub-exponential (as expected due to Hardy's asymptotic result). We can graph $C(n)$ using a logarithmic scale to showcase this, as seen in Figure~\ref{f2:log}.
+\begin{figure}[htbp!]
   \centering
   \begin{tikzpicture}
     \pgfplotstableread{graph/something.dat}{\decreasing}
@@ -80,10 +77,10 @@ However, by using computer software like Mathematica, we may calculate $C(n)$, t
       \addplot[thick, red] table {\decreasing};
     \end{axis}
   \end{tikzpicture}
-  \caption{The number of ways $C(n)$ to make $n$ increases rapidly as $n$ increrases}
+  \caption{The number of ways $C(n)$ to make $n$ increases rapidly as $n$ increases.}
   \label{f1}
 \end{figure}
-\begin{figure}[htbp]
+\begin{figure}[htbp!]
   \centering
   \begin{tikzpicture}
     \pgfplotstableread{graph/something2.dat}{\decreasing}
@@ -91,6 +88,6 @@ However, by using computer software like Mathematica, we may calculate $C(n)$, t
       \addplot[thick, red] table {\decreasing};
     \end{axis}
   \end{tikzpicture}
-  \caption{The number of ways, $C(n)$, grows sub-exponentially}
+  \caption{The number of ways, $C(n)$, grows sub-exponentially.}
   \label{f2:log}
 \end{figure}

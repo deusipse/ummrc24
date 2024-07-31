@@ -1,9 +1,9 @@
 \section{Problem 2}
 \begin{definition}
-  Let $\mathcal{L}_{10, 2}(N)$ be the minimum number of summands needed to construct $N$ using elements in \NTen.
+  Let $\mathcal{L}_{10, 2}(n)$ be the minimum number of summands needed to construct $n$ using elements in \NTen.
 \end{definition}
 \begin{problem}\label{p2}
-Determine $\mathcal{L}_{10, 2}(N)$ for the following values of $N$:
+Determine $\mathcal{L}_{10, 2}(n)$ for the following values of $n$:
 \begin{itemize}
   \item $1337$
   \item  $12345$
@@ -15,39 +15,9 @@ For sake of convenience, we define $d_{n, i}$ to be the $i$th digit of $n$.
   For an integer $n$, the $i$th digit of  $n$, with the leftmost digit being the first, is denoted $d_{n, i}$.
 \end{definition}
 For example, $d_{1337, 4} = 7$.
-\begin{theorem}
-  For a positive integer $N$, $\mathcal{L}_{10, 2}(N) = \max\{d_{n, i}\}$.
+\begin{theorem} \label{thm1}
+  For a positive integer $N$, $\mathcal{L}_{10, 2}(n) = \max\{d_{n, i}\}$.
 \end{theorem}
 \begin{proof}
-  Firstly, we recognise that $\LTen(n)$ is equivalent to the minimum number of subtractions to make $0$ from $n$, using elements of \NTen. Intuitively, it is obvious that an optimal strategy would be to subtract $1$ from every non-zero digit in $n$, which decreases the largest digit by $1$ every time. This means that the total number of subtractions is simply equal to the largest digit of $n$. We can prove that this is the optimal strategy as part of a more general theorem.
+  Firstly, we recognise that $\LTen(n)$ is equivalent to the minimum number of subtractions to make $0$ from $n$, using elements of \NTen. Intuitively, it is obvious that an optimal strategy would be to subtract $1$ from every non-zero digit in $n$, which decreases the largest digit by $1$ every time. This means that the total number of subtractions is simply equal to the largest digit of $n$. We prove that this is the optimal strategy as part of a more general theorem in Theorem~\ref{thm:max}.
 \end{proof}
-\begin{theorem}
-  For a positive integer $N$, we have \[\mathcal{L}_{10, k}(N) = \ceil*{\frac{\max\{d_{n, i}\}}{k-1}}.\]
-\end{theorem}
-\begin{proof}
-  Recall that in \NTen{}, the largest available digit is $k-1$. Again, the optimal strategy is to subtract $k-1$ from the largest digit in $n$ at every subtraction, until the largest digit is less than $k-1$, at which point it is obvious that it takes one more subtraction to reach zero. This gives us a total number of \[
-    \ceil*{\frac{\max\{d_{n, i\}}}{k-1}}
-  \] subtractions. We must now prove that it is impossible to do better than this. 
-
-  Firstly, notice that if we subtract using numbers that are less than the largest digit every time, then the largest digit decreases by less than $k-1 $ each subtraction, meaning that we cannot beat the previous minimum number of subtractions. However, if we use subtractions that use digits larger than the largest digit in $n$, such as in $123-4$, we must be more careful.
-
-  Consider the representation of a 4 digit number $n$ as concatenated digits $a|b|c|d$. Note that we can `group' digits to make an equivalent representation $(10a + b)|c|d$, in other words, we will allow `digits' that have two numbers.
-
-  Now consider the subtraction $123-4$. The usual way we subtract numbers is that we `carry' a $1$ to the $3$ to do the subtraction $1|1|13 - 4 = 119$. Thus we see that the representation $a|b|c|d$ is equivalent to the representation $a|b|(c-1)|(d+10)$. This only occurs when we subtract using a digit that is greater than the largest digit in $n$. Notice that if we do not use any `alternate' representations, with the digits in their usual place, then every digit will be between $0$ and $9$, inclusive. This means that the \emph{maximum} number of subtractions must be \[
-    \ceil*{\frac{9}{k-1}}
-  .\] However, note that if we subtract using digits larger than the largest digit in  $n$, then we must have some pattern of  $(c-1)|(d+10)$ in the representation of  $n$. This means that the largest digit of $n$ now ranges from $10$ to $19$, inclusive. Importantly, this means that the \emph{minimum} number of subtractions is now \[
-  \ceil*{\frac{10}{k-1}} \ge \ceil*{\frac{9}{k-1}}
-  .\] Thus it always takes more (or the same) number of subtractions if we subtract using digits that are larger than the largest digit in $n$. Hence, the optimal strategy of subtracting using digits that are equal to the largest digit, is indeed the best possible strategy.
-\end{proof}
-Using this, we can easily determine the answers to Problem~\ref{p2}, which are in Table~\ref{t1}.
-\begin{table}[H]
-  \centering
-  \begin{tabular}{lc} \toprule
-    $n$ & $\LTen(n)$ \\ \midrule
-    1337 & 7 \\
-    12345 & 5 \\
-    190274876 & 9 \\ \bottomrule
-  \end{tabular}
-  \caption{}
-  \label{t1}
-\end{table}
